@@ -13,6 +13,22 @@ public class ArtistViewModel {
     @NotEmpty(message = "Artist twitter cannot be empty.")
     private String twitter;
 
+    public ArtistViewModel() {
+    }
+
+    public ArtistViewModel(Integer id, String name, String instagram, String twitter) {
+        this.id = id;
+        this.name = name;
+        this.instagram = instagram;
+        this.twitter = twitter;
+    }
+
+    public ArtistViewModel(String name, String instagram, String twitter) {
+        this.name = name;
+        this.instagram = instagram;
+        this.twitter = twitter;
+    }
+
     public Integer getId() {
         return id;
     }
