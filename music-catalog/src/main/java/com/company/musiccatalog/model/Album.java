@@ -25,7 +25,6 @@ public class Album implements Serializable {
     @Column(name = "release_date")
     private LocalDate releaseDate;
 
-    //
     @Column(name = "label_id")
     private Integer labelId;
     @Column(name = "list_price")

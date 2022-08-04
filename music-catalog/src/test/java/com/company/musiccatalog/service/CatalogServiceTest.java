@@ -1,9 +1,9 @@
 package com.company.musiccatalog.service;
 
 import com.company.musiccatalog.model.Artist;
+import com.company.musiccatalog.repository.AlbumRepository;
 import com.company.musiccatalog.repository.ArtistRepository;
 import com.company.musiccatalog.repository.LabelRepository;
-import com.company.musiccatalog.viewModel.ArtistViewModel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -19,12 +19,13 @@ public class CatalogServiceTest {
     private CatalogService service;
     private ArtistRepository artistRepo;
     private LabelRepository labelRepo;
+    private AlbumRepository albumRepo;
 
     @Before
     public void setUp() {
         setUpArtistRepositoryMock();
 
-        this.service = new CatalogService(artistRepo, labelRepo);
+        this.service = new CatalogService(artistRepo, labelRepo, albumRepo);
     }
 
     private void setUpArtistRepositoryMock() {
@@ -50,10 +51,10 @@ public class CatalogServiceTest {
     @Test
     public void createArtistShouldReturnArtistWithIdWhenSaving() {
         //arrange
-        ArtistViewModel artistToSave = new ArtistViewModel("Jay", "@jaychou", "@jaychou");
-        ArtistViewModel expectedResult = new ArtistViewModel(1, "Jay", "@jaychou", "@jaychou");
+        Artist artistToSave = new Artist("Jay", "@jaychou", "@jaychou");
+        Artist expectedResult = new Artist(1, "Jay", "@jaychou", "@jaychou");
         //act
-        ArtistViewModel actualResult = service.createArtist(artistToSave);
+        Artist actualResult = service.createArtist(artistToSave);
 
         assertEquals(expectedResult, actualResult);
     }
