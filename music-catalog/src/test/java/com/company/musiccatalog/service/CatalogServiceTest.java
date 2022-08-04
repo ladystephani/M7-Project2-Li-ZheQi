@@ -2,6 +2,7 @@ package com.company.musiccatalog.service;
 
 import com.company.musiccatalog.model.Artist;
 import com.company.musiccatalog.repository.ArtistRepository;
+import com.company.musiccatalog.repository.LabelRepository;
 import com.company.musiccatalog.viewModel.ArtistViewModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,12 +18,13 @@ import static org.mockito.Mockito.mock;
 public class CatalogServiceTest {
     private CatalogService service;
     private ArtistRepository artistRepo;
+    private LabelRepository labelRepo;
 
     @Before
     public void setUp() {
         setUpArtistRepositoryMock();
 
-        this.service = new CatalogService(artistRepo);
+        this.service = new CatalogService(artistRepo, labelRepo);
     }
 
     private void setUpArtistRepositoryMock() {

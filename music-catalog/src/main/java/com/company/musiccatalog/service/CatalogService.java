@@ -1,8 +1,11 @@
 package com.company.musiccatalog.service;
 
 import com.company.musiccatalog.model.Artist;
+import com.company.musiccatalog.model.Label;
 import com.company.musiccatalog.repository.ArtistRepository;
+import com.company.musiccatalog.repository.LabelRepository;
 import com.company.musiccatalog.viewModel.ArtistViewModel;
+import com.company.musiccatalog.viewModel.LabelViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +16,15 @@ import java.util.Optional;
 @Component
 public class CatalogService {
     ArtistRepository artistRepo;
+    LabelRepository labelRepo;
 
     @Autowired
     public CatalogService(
-            ArtistRepository artistRepository
+            ArtistRepository artistRepository,
+            LabelRepository labelRepository
     ) {
         this.artistRepo = artistRepository;
+        this.labelRepo = labelRepository;
     }
 
     //Artist
@@ -75,7 +81,60 @@ public class CatalogService {
         artistRepo.save(artist);
     }
 
+
     public void deleteArtist(Integer id) {artistRepo.deleteById(id);}
+
+    //label
+    public LabelViewModel createLabel(LabelViewModel labelViewModel) {
+        // Validate incoming Game Data in the view model.
+        // All validations were done using JSR303
+        if (labelViewModel==null) throw new IllegalArgumentException("No label is passed! Label object is null!");
+
+        Label label = new Label();
+        label.setName(labelViewModel.getName());
+        label.setWebsite(labelViewModel.getWebsite());
+
+        labelViewModel.setId(labelRepo.save(label).getId());
+        return labelViewModel;
+    }
+
+    public List<LabelViewModel> getAllLabels() {
+        List<Label> labelList = labelRepo.findAll();
+        List<LabelViewModel> labelViewModelList = new ArrayList<>();
+
+        if (labelList == null) {
+            return null;
+        } else {
+            labelList.stream().forEach(label -> labelViewModelList.add(buildLabelViewModel(label)));
+        }
+        return labelViewModelList;
+    }
+
+    public LabelViewModel getLabel(Integer id) {
+        Optional<Label> label = labelRepo.findById(id);
+        if (label == null) {
+            return null;
+        } else {
+            return buildLabelViewModel(label.get());
+        }
+    }
+
+    public void updateLabel(LabelViewModel labelViewModel) {
+        //validate data
+        if (labelViewModel==null) throw new IllegalArgumentException("No label is passed! ");
+
+        //make sure artist exists. If not, throw exception...
+        if (this.getLabel(labelViewModel.getId()) == null) throw new IllegalArgumentException("No such label to update");
+
+        Label label = new Label();
+        label.setId(labelViewModel.getId());
+        label.setName(labelViewModel.getName());
+        label.setWebsite(labelViewModel.getWebsite());
+
+        labelRepo.save(label);
+    }
+
+    public void deleteLabel(Integer id) {labelRepo.deleteById(id);}
 
     //helper methods
     public ArtistViewModel buildArtistViewModel(Artist artist) {
@@ -85,5 +144,13 @@ public class CatalogService {
         artistViewModel.setInstagram(artist.getInstagram());
         artistViewModel.setTwitter(artist.getTwitter());
         return artistViewModel;
+    }
+
+    public LabelViewModel buildLabelViewModel(Label label) {
+        LabelViewModel labelViewModel = new LabelViewModel();
+        labelViewModel.setId(label.getId());
+        labelViewModel.setName(label.getName());
+        labelViewModel.setWebsite(label.getWebsite());
+        return labelViewModel;
     }
 }
