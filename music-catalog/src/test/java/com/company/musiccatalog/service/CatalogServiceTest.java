@@ -20,12 +20,12 @@ public class CatalogServiceTest {
     private ArtistRepository artistRepo;
     private LabelRepository labelRepo;
     private AlbumRepository albumRepo;
-
+    private TrackRepository trackRepo;
     @Before
     public void setUp() {
         setUpArtistRepositoryMock();
 
-        this.service = new CatalogService(artistRepo, labelRepo, albumRepo);
+        this.service = new CatalogService(artistRepo, labelRepo, albumRepo, trackRepo);
     }
 
     private void setUpArtistRepositoryMock() {
